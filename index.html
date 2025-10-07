@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVIT Technologies - Security & Access Solutions</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>SVIT Technologies</h1>
+                    <span class="tagline">Security & Access Solutions</span>
+                </div>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="#" onclick="showPage('home')">Home</a></li>
+                        <li><a href="#" onclick="showPage('shop')">Shop</a></li>
+                        <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search products..." />
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                    <button class="cart-btn" onclick="showPage('cart')">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </button>
+                    <button class="account-btn" onclick="showPage('account')">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <button class="admin-btn" onclick="showPage('admin')">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <nav class="mobile-nav hidden">
+        <ul>
+            <li><a href="#" onclick="showPage('home'); toggleMobileMenu()">Home</a></li>
+            <li><a href="#" onclick="showPage('shop'); toggleMobileMenu()">Shop</a></li>
+            <li><a href="#" onclick="showPage('contact'); toggleMobileMenu()">Contact</a></li>
+            <li><a href="#" onclick="showPage('cart'); toggleMobileMenu()">Cart</a></li>
+            <li><a href="#" onclick="showPage('account'); toggleMobileMenu()">Account</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <section id="home" class="page active">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1>SVIT Technologies</h1>
+                        <h2>Security & Access Solutions</h2>
+                        <p>Leading provider of CCTV cameras and biometric systems</p>
+                        <button class="btn btn--primary btn--lg" onclick="showPage('shop')">Explore Products</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="categories-section">
+                <div class="container">
+                    <h2>Our Product Categories</h2>
+                    <div class="categories-grid">
+                        <div class="category-card" onclick="filterByCategory('cctv-cameras')">
+                            <i class="fas fa-video"></i>
+                            <h3>CCTV Cameras</h3>
+                            <p>Professional surveillance cameras for security monitoring</p>
+                        </div>
+                        <div class="category-card" onclick="filterByCategory('biometric-systems')">
+                            <i class="fas fa-fingerprint"></i>
+                            <h3>Biometric Systems</h3>
+                            <p>Advanced biometric authentication and access control</p>
+                        </div>
+                        <div class="category-card" onclick="filterByCategory('access-control')">
+                            <i class="fas fa-lock"></i>
+                            <h3>Access Control</h3>
+                            <p>Electronic door locks and security access systems</p>
+                        </div>
+                        <div class="category-card" onclick="filterByCategory('accessories')">
+                            <i class="fas fa-tools"></i>
+                            <h3>Security Accessories</h3>
+                            <p>Supporting hardware and installation accessories</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products -->
+            <div class="featured-products">
+                <div class="container">
+                    <h2>Featured Products</h2>
+                    <div class="products-grid" id="featuredProducts"></div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="testimonials">
+                <div class="container">
+                    <h2>What Our Clients Say</h2>
+                    <div class="testimonials-grid" id="testimonialsContainer"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shop Page -->
+        <section id="shop" class="page">
+            <div class="container">
+                <div class="shop-header">
+                    <h1>Our Products</h1>
+                    <div class="breadcrumb">
+                        <span onclick="showPage('home')">Home</span> / Shop
+                    </div>
+                </div>
+                
+                <div class="shop-layout">
+                    <aside class="shop-filters">
+                        <h3>Filters</h3>
+                        
+                        <div class="filter-group">
+                            <h4>Category</h4>
+                            <select id="categoryFilter" onchange="applyFilters()">
+                                <option value="">All Categories</option>
+                                <option value="cctv-cameras">CCTV Cameras</option>
+                                <option value="biometric-systems">Biometric Systems</option>
+                                <option value="access-control">Access Control</option>
+                                <option value="accessories">Accessories</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <h4>Price Range</h4>
+                            <select id="priceFilter" onchange="applyFilters()">
+                                <option value="">All Prices</option>
+                                <option value="0-5000">₹0 - ₹5,000</option>
+                                <option value="5000-15000">₹5,000 - ₹15,000</option>
+                                <option value="15000-30000">₹15,000 - ₹30,000</option>
+                                <option value="30000+">₹30,000+</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <h4>Brand</h4>
+                            <select id="brandFilter" onchange="applyFilters()">
+                                <option value="">All Brands</option>
+                                <option value="Hikvision">Hikvision</option>
+                                <option value="Dahua">Dahua</option>
+                                <option value="ZKTeco">ZKTeco</option>
+                                <option value="Suprema">Suprema</option>
+                                <option value="SVIT Tech">SVIT Tech</option>
+                                <option value="eSSL">eSSL</option>
+                                <option value="CP Plus">CP Plus</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <h4>Sort By</h4>
+                            <select id="sortFilter" onchange="applyFilters()">
+                                <option value="name">Name</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="rating">Rating</option>
+                            </select>
+                        </div>
+                    </aside>
+
+                    <div class="shop-content">
+                        <div class="shop-toolbar">
+                            <span id="productCount">12 products found</span>
+                            <select id="perPageSelect" onchange="applyFilters()">
+                                <option value="12">12 per page</option>
+                                <option value="24">24 per page</option>
+                                <option value="48">48 per page</option>
+                            </select>
+                        </div>
+                        
+                        <div class="products-grid" id="shopProducts"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Detail Page -->
+        <section id="product-detail" class="page">
+            <div class="container">
+                <div class="breadcrumb">
+                    <span onclick="showPage('home')">Home</span> / 
+                    <span onclick="showPage('shop')">Shop</span> / 
+                    <span id="productBreadcrumb">Product</span>
+                </div>
+                
+                <div class="product-detail-content" id="productDetailContent">
+                    <!-- Product details will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Cart Page -->
+        <section id="cart" class="page">
+            <div class="container">
+                <h1>Shopping Cart</h1>
+                <div class="cart-content" id="cartContent">
+                    <!-- Cart items will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Checkout Page -->
+        <section id="checkout" class="page">
+            <div class="container">
+                <h1>Checkout</h1>
+                <div class="checkout-content">
+                    <div class="checkout-steps">
+                        <div class="step active">
+                            <span>1</span>
+                            <label>Customer Information</label>
+                        </div>
+                        <div class="step">
+                            <span>2</span>
+                            <label>Shipping</label>
+                        </div>
+                        <div class="step">
+                            <span>3</span>
+                            <label>Payment</label>
+                        </div>
+                    </div>
+                    
+                    <div class="checkout-form" id="checkoutForm">
+                        <!-- Checkout form will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Account Page -->
+        <section id="account" class="page">
+            <div class="container">
+                <div class="account-layout">
+                    <aside class="account-nav">
+                        <h2>My Account</h2>
+                        <ul>
+                            <li><a href="#" onclick="showAccountTab('profile')" class="active">Profile</a></li>
+                            <li><a href="#" onclick="showAccountTab('orders')">Order History</a></li>
+                            <li><a href="#" onclick="showAccountTab('wishlist')">Wishlist</a></li>
+                            <li><a href="#" onclick="showAccountTab('addresses')">Addresses</a></li>
+                        </ul>
+                    </aside>
+                    
+                    <div class="account-content">
+                        <div id="profile-tab" class="account-tab active">
+                            <h3>Profile Information</h3>
+                            <form class="profile-form">
+                                <div class="form-group">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" value="John Doe">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" value="john.doe@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" value="+91 98765 43210">
+                                </div>
+                                <button type="submit" class="btn btn--primary">Update Profile</button>
+                            </form>
+                        </div>
+                        
+                        <div id="orders-tab" class="account-tab">
+                            <h3>Order History</h3>
+                            <div id="orderHistory">
+                                <!-- Order history will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div id="wishlist-tab" class="account-tab">
+                            <h3>Wishlist</h3>
+                            <div id="wishlistItems" class="products-grid">
+                                <!-- Wishlist items will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div id="addresses-tab" class="account-tab">
+                            <h3>Saved Addresses</h3>
+                            <div id="savedAddresses">
+                                <!-- Saved addresses will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Dashboard -->
+        <section id="admin" class="page">
+            <div class="container">
+                <div class="admin-layout">
+                    <aside class="admin-nav">
+                        <h2>Admin Dashboard</h2>
+                        <ul>
+                            <li><a href="#" onclick="showAdminTab('overview')" class="active">Overview</a></li>
+                            <li><a href="#" onclick="showAdminTab('products')">Products</a></li>
+                            <li><a href="#" onclick="showAdminTab('orders')">Orders</a></li>
+                            <li><a href="#" onclick="showAdminTab('customers')">Customers</a></li>
+                        </ul>
+                    </aside>
+                    
+                    <div class="admin-content">
+                        <div id="overview-tab" class="admin-tab active">
+                            <h3>Dashboard Overview</h3>
+                            <div class="admin-stats">
+                                <div class="stat-card">
+                                    <h4>Total Orders</h4>
+                                    <span class="stat-number">1,247</span>
+                                </div>
+                                <div class="stat-card">
+                                    <h4>Revenue</h4>
+                                    <span class="stat-number">₹12,45,670</span>
+                                </div>
+                                <div class="stat-card">
+                                    <h4>Products</h4>
+                                    <span class="stat-number">156</span>
+                                </div>
+                                <div class="stat-card">
+                                    <h4>Customers</h4>
+                                    <span class="stat-number">892</span>
+                                </div>
+                            </div>
+                            
+                            <div class="chart-container" style="position: relative; height: 400px;">
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div id="products-tab" class="admin-tab">
+                            <h3>Product Management</h3>
+                            <button class="btn btn--primary" onclick="showAddProductForm()">Add New Product</button>
+                            <div id="adminProductsList">
+                                <!-- Admin products list will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div id="orders-tab" class="admin-tab">
+                            <h3>Order Management</h3>
+                            <div id="adminOrdersList">
+                                <!-- Admin orders list will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div id="customers-tab" class="admin-tab">
+                            <h3>Customer Management</h3>
+                            <div id="adminCustomersList">
+                                <!-- Admin customers list will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact" class="page">
+            <div class="container">
+                <h1>Contact Us</h1>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-card">
+                            <h3>Get in Touch</h3>
+                            <div class="contact-detail">
+                                <i class="fas fa-phone"></i>
+                                <span>+91 98765 43210</span>
+                            </div>
+                            <div class="contact-detail">
+                                <i class="fas fa-envelope"></i>
+                                <span>info@svittech.com</span>
+                            </div>
+                            <div class="contact-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>123 Tech Park, Electronic City, Bangalore, Karnataka 560100</span>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-card">
+                            <h3>Business Hours</h3>
+                            <div class="business-hours">
+                                <div>Monday - Friday: 9:00 AM - 6:00 PM</div>
+                                <div>Saturday: 9:00 AM - 1:00 PM</div>
+                                <div>Sunday: Closed</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form class="contact-form">
+                        <h3>Send us a Message</h3>
+                        <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Subject</label>
+                            <select class="form-control">
+                                <option>Technical Support</option>
+                                <option>Sales Inquiry</option>
+                                <option>Partnership</option>
+                                <option>General Question</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn--primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SVIT Technologies</h3>
+                    <p>Leading provider of CCTV cameras and biometric systems since 2015.</p>
+                    <div class="certifications">
+                        <span class="cert-badge">ISO 9001:2015</span>
+                        <span class="cert-badge">CE Certified</span>
+                        <span class="cert-badge">FCC Approved</span>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" onclick="showPage('home')">Home</a></li>
+                        <li><a href="#" onclick="showPage('shop')">Products</a></li>
+                        <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Product Categories</h4>
+                    <ul>
+                        <li><a href="#" onclick="filterByCategory('cctv-cameras')">CCTV Cameras</a></li>
+                        <li><a href="#" onclick="filterByCategory('biometric-systems')">Biometric Systems</a></li>
+                        <li><a href="#" onclick="filterByCategory('access-control')">Access Control</a></li>
+                        <li><a href="#" onclick="filterByCategory('accessories')">Accessories</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe for latest updates and offers</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email" required>
+                        <button type="submit" class="btn btn--primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 SVIT Technologies. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login</h2>
+            <form class="auth-form">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
