@@ -1,0 +1,67 @@
+/* Layout container: Sidebar + Main section side by side */
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: #f5f6fa;
+}
+
+/* Sidebar fixed on left */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  transition: width 0.3s ease;
+  z-index: 100;
+}
+
+/* Main section beside sidebar */
+.main-section {
+  flex-grow: 1;
+  margin-left: 230px; /* width of sidebar */
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+}
+
+.main-section.collapsed {
+  margin-left: 70px; /* collapsed sidebar */
+}
+
+/* Header stays on top */
+header {
+  background: #fff;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e6e6e6;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
+/* Page content */
+.content {
+  flex: 1;
+  padding: 20px 30px;
+  overflow-y: auto;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: absolute;
+    height: 100vh;
+    z-index: 200;
+  }
+
+  .main-section {
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,91 @@
+/* Reset some default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Full-screen center alignment */
+.login {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Form container */
+.loginform {
+  background: #fff;
+  padding: 40px 35px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.loginform:hover {
+  transform: translateY(-5px);
+}
+
+/* Heading */
+.loginform h3 {
+  margin-bottom: 25px;
+  font-size: 26px;
+  color: #333;
+}
+
+/* Label */
+.loginform label {
+  display: block;
+  text-align: left;
+  margin: 10px 0 5px;
+  font-size: 14px;
+  color: #444;
+  font-weight: 500;
+}
+
+/* Input fields */
+.loginform input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+
+.loginform input:focus {
+  border-color: #667eea;
+}
+
+/* Submit button */
+.loginform button {
+  width: 50%;
+  background: #667eea;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  margin-top: 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.loginform button:hover {
+  background: #5a67d8;
+}
+
+/* Small screen responsiveness */
+@media (max-width: 480px) {
+  .loginform {
+    padding: 30px 25px;
+  }
+
+  .loginform h3 {
+    font-size: 22px;
+  }
+}

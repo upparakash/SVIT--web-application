@@ -1,8 +1,8 @@
-const express = require("express");
-const mysql = require("mysql2");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const bodyParser = require("body-parser");
+import express from 'express'
+import mysql from 'mysql2';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import bodyParser from 'body-parser';
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,8 +11,8 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "Akash@1998",
-  database: "userdb",
+  password: "Akhila@1",
+  database: "svit",
 });
 
 db.connect((err) => {
