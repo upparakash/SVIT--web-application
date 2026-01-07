@@ -9,9 +9,11 @@ const Sidebar = () => {
   const menuItems = [
     { name: "Dashboard", icon: <FaHome />, path: "/dashboard" },
     { name: "Products", icon: <FaBox />, path: "/dashboard/products" },
+    { name: "ProductInfo", icon: <FaBox />, path: "/dashboard/productinfo" },
     { name: "Categories", icon: <FaLayerGroup />, path: "/dashboard/categories" },
     { name: "Orders", icon: <FaClipboardList />, path: "/dashboard/orders" },
     { name: "Users", icon: <FaUser />, path: "/dashboard/users" },
+    { name: "Stock", icon: <FaUser />, path: "/dashboard/stock" },
     { name: "Logout", icon: <FaSignOutAlt />, path: "/" },
   ];
 

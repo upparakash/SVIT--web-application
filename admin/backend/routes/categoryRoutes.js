@@ -1,35 +1,3 @@
-// const express = require("express");
-// const router = express.Router();
-
-// const {
-//   getAllCategories,
-//   getcategory,
-//   addCategory,
-//   updateCategory,
-//   deleteCategory,
-// } = require("../controllers/categoryController");
-
-// const { uploadSingle } = require("../middleware/multerConfig");
-// const { authAdmin } = require("../middleware/authAdmin"); // ✅ import auth middleware
-
-// // 📍 Public routes (no auth needed)
-// router.get("/allCategories", getAllCategories);
-// router.get("/:id", getcategory);
-
-// // 📍 Protected routes (admin only)
-// router.post("/addCategory", authAdmin, uploadSingle("image"), addCategory);
-// router.put("/:id", authAdmin, uploadSingle("image"), updateCategory);
-// router.delete("/:id", authAdmin, deleteCategory);
-
-// module.exports = router;
-
-
-
-
-
-
-
-
 const express = require("express");
 const router = express.Router();
 const { uploadSingle } = require("../middleware/multerConfig");

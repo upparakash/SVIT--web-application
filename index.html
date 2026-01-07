@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
@@ -129,11 +131,11 @@
                         <span onclick="showPage('home')">Home</span> / Shop
                     </div>
                 </div>
-                
+
                 <div class="shop-layout">
                     <aside class="shop-filters">
                         <h3>Filters</h3>
-                        
+
                         <div class="filter-group">
                             <h4>Category</h4>
                             <select id="categoryFilter" onchange="applyFilters()">
@@ -190,7 +192,7 @@
                                 <option value="48">48 per page</option>
                             </select>
                         </div>
-                        
+
                         <div class="products-grid" id="shopProducts"></div>
                     </div>
                 </div>
@@ -201,11 +203,11 @@
         <section id="product-detail" class="page">
             <div class="container">
                 <div class="breadcrumb">
-                    <span onclick="showPage('home')">Home</span> / 
-                    <span onclick="showPage('shop')">Shop</span> / 
+                    <span onclick="showPage('home')">Home</span> /
+                    <span onclick="showPage('shop')">Shop</span> /
                     <span id="productBreadcrumb">Product</span>
                 </div>
-                
+
                 <div class="product-detail-content" id="productDetailContent">
                     <!-- Product details will be loaded here -->
                 </div>
@@ -241,7 +243,7 @@
                             <label>Payment</label>
                         </div>
                     </div>
-                    
+
                     <div class="checkout-form" id="checkoutForm">
                         <!-- Checkout form will be loaded here -->
                     </div>
@@ -262,7 +264,7 @@
                             <li><a href="#" onclick="showAccountTab('addresses')">Addresses</a></li>
                         </ul>
                     </aside>
-                    
+
                     <div class="account-content">
                         <div id="profile-tab" class="account-tab active">
                             <h3>Profile Information</h3>
@@ -282,21 +284,21 @@
                                 <button type="submit" class="btn btn--primary">Update Profile</button>
                             </form>
                         </div>
-                        
+
                         <div id="orders-tab" class="account-tab">
                             <h3>Order History</h3>
                             <div id="orderHistory">
                                 <!-- Order history will be loaded here -->
                             </div>
                         </div>
-                        
+
                         <div id="wishlist-tab" class="account-tab">
                             <h3>Wishlist</h3>
                             <div id="wishlistItems" class="products-grid">
                                 <!-- Wishlist items will be loaded here -->
                             </div>
                         </div>
-                        
+
                         <div id="addresses-tab" class="account-tab">
                             <h3>Saved Addresses</h3>
                             <div id="savedAddresses">
@@ -321,7 +323,7 @@
                             <li><a href="#" onclick="showAdminTab('customers')">Customers</a></li>
                         </ul>
                     </aside>
-                    
+
                     <div class="admin-content">
                         <div id="overview-tab" class="admin-tab active">
                             <h3>Dashboard Overview</h3>
@@ -343,12 +345,12 @@
                                     <span class="stat-number">892</span>
                                 </div>
                             </div>
-                            
+
                             <div class="chart-container" style="position: relative; height: 400px;">
                                 <canvas id="salesChart"></canvas>
                             </div>
                         </div>
-                        
+
                         <div id="products-tab" class="admin-tab">
                             <h3>Product Management</h3>
                             <button class="btn btn--primary" onclick="showAddProductForm()">Add New Product</button>
@@ -356,14 +358,14 @@
                                 <!-- Admin products list will be loaded here -->
                             </div>
                         </div>
-                        
+
                         <div id="orders-tab" class="admin-tab">
                             <h3>Order Management</h3>
                             <div id="adminOrdersList">
                                 <!-- Admin orders list will be loaded here -->
                             </div>
                         </div>
-                        
+
                         <div id="customers-tab" class="admin-tab">
                             <h3>Customer Management</h3>
                             <div id="adminCustomersList">
@@ -396,7 +398,7 @@
                                 <span>123 Tech Park, Electronic City, Bangalore, Karnataka 560100</span>
                             </div>
                         </div>
-                        
+
                         <div class="contact-card">
                             <h3>Business Hours</h3>
                             <div class="business-hours">
@@ -406,7 +408,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <form class="contact-form">
                         <h3>Send us a Message</h3>
                         <div class="form-group">
@@ -454,7 +456,7 @@
                         <span class="cert-badge">FCC Approved</span>
                     </div>
                 </div>
-                
+
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
@@ -464,7 +466,7 @@
                         <li><a href="#">About Us</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h4>Product Categories</h4>
                     <ul>
@@ -474,7 +476,7 @@
                         <li><a href="#" onclick="filterByCategory('accessories')">Accessories</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h4>Newsletter</h4>
                     <p>Subscribe for latest updates and offers</p>
@@ -484,7 +486,7 @@
                     </form>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
                 <p>&copy; 2025 SVIT Technologies. All rights reserved.</p>
             </div>
@@ -515,4 +517,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>
