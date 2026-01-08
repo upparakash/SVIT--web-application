@@ -15,7 +15,7 @@ exports.getAllStock = async (req, res) => {
         ps.pending,
         ps.confirmed,
         (ps.stock - (ps.pending + ps.confirmed)) AS available_stock
-      FROM product_stock ps
+      FROM svit_product_stock ps
       ORDER BY ps.created_at DESC
     `);
 
@@ -33,7 +33,7 @@ exports.getStockByProductId = async (req, res) => {
 
   try {
     const [rows] = await db.query(
-      "SELECT * FROM product_stock WHERE product_id = ?",
+      "SELECT * FROM svit_product_stock WHERE product_id = ?",
       [productId]
     );
 
@@ -55,7 +55,7 @@ exports.createStock = async (req, res) => {
 
   try {
     const [existing] = await db.query(
-      "SELECT id FROM product_stock WHERE product_id = ?",
+      "SELECT id FROM svit_product_stock WHERE product_id = ?",
       [product_id]
     );
 
@@ -64,7 +64,7 @@ exports.createStock = async (req, res) => {
     }
 
     await db.query(
-      `INSERT INTO product_stock 
+      `INSERT INTO svit_product_stock 
        (product_id, product_image, product_name, stock)
        VALUES (?, ?, ?, ?)`,
       [product_id, product_image, product_name, stock]
@@ -85,7 +85,7 @@ exports.updateStock = async (req, res) => {
 
   try {
     await db.query(
-      "UPDATE product_stock SET stock = ? WHERE product_id = ?",
+      "UPDATE svit_product_stock SET stock = ? WHERE product_id = ?",
       [stock, productId]
     );
 
@@ -107,7 +107,7 @@ exports.addToPending = async (req, res) => {
     await connection.beginTransaction();
 
     const [[stock]] = await connection.query(
-      "SELECT stock, pending, confirmed FROM product_stock WHERE product_id = ? FOR UPDATE",
+      "SELECT stock, pending, confirmed FROM svit_product_stock WHERE product_id = ? FOR UPDATE",
       [productId]
     );
 
@@ -116,7 +116,7 @@ exports.addToPending = async (req, res) => {
     }
 
     await connection.query(
-      "UPDATE product_stock SET pending = pending + 1 WHERE product_id = ?",
+      "UPDATE svit_product_stock SET pending = pending + 1 WHERE product_id = ?",
       [productId]
     );
 
@@ -138,7 +138,7 @@ exports.confirmStock = async (req, res) => {
 
   try {
     await db.query(
-      `UPDATE product_stock
+      `UPDATE svit_product_stock
        SET pending = pending - 1,
            confirmed = confirmed + 1
        WHERE product_id = ? AND pending > 0`,
@@ -159,7 +159,7 @@ exports.cancelPending = async (req, res) => {
 
   try {
     await db.query(
-      `UPDATE product_stock
+      `UPDATE svit_product_stock
        SET pending = pending - 1
        WHERE product_id = ? AND pending > 0`,
       [productId]

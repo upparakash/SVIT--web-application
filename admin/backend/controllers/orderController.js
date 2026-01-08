@@ -7,7 +7,7 @@ exports.placeOrder = async (req, res) => {
   try {
     const { customer, addresses, shipping, payment, cart } = req.body;
 
-    console.log("REQ.USER:", req.user); // 👈 must exist now
+    console.log("REQ.USER:", req.user); 
     const userId = req.user.id;
 
     const orderId = `ORD-${Date.now()}`;
@@ -17,7 +17,7 @@ exports.placeOrder = async (req, res) => {
 
     await connection.query(
       `
-      INSERT INTO orders (
+      INSERT INTO svit_orders (
         order_id,
         user_id,
         name,
@@ -55,7 +55,7 @@ exports.placeOrder = async (req, res) => {
     for (const item of cart.items) {
       await connection.query(
         `
-        INSERT INTO order_items (
+        INSERT INTO svit_order_items (
           order_id,
           product_id,
           product_name,
@@ -99,7 +99,7 @@ exports.placeOrder = async (req, res) => {
 exports.getAllOrders = async (req, res) => {
   try {
     const [orders] = await db.query(
-      "SELECT * FROM orders ORDER BY created_at DESC"
+      "SELECT * FROM svit_orders ORDER BY created_at DESC"
     );
 
     res.json({ success: true, orders });
@@ -119,7 +119,7 @@ exports.getOrderById = async (req, res) => {
 
   try {
     const [[order]] = await db.query(
-      "SELECT * FROM orders WHERE order_id = ?",
+      "SELECT * FROM svit_orders WHERE order_id = ?",
       [orderId]
     );
 
@@ -131,7 +131,7 @@ exports.getOrderById = async (req, res) => {
     }
 
     const [items] = await db.query(
-      "SELECT * FROM order_items WHERE order_id = ?",
+      "SELECT * FROM svit_order_items WHERE order_id = ?",
       [orderId]
     );
 
@@ -160,7 +160,7 @@ exports.getOrdersByUserId = async (req, res) => {
     console.log("User ID:", userId);
 
     const [orders] = await db.query(
-      "SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC",
+      "SELECT * FROM svit_orders WHERE user_id = ? ORDER BY created_at DESC",
       [userId]
     );
 
@@ -184,7 +184,7 @@ exports.updateOrderStatus = async (req, res) => {
 
   try {
     await db.query(
-      "UPDATE orders SET order_status = ? WHERE order_id = ?",
+      "UPDATE svit_orders SET order_status = ? WHERE order_id = ?",
       [status, orderId]
     );
 
@@ -209,7 +209,7 @@ exports.updateOrderItemStatus = async (req, res) => {
 
   try {
     await db.query(
-      "UPDATE order_items SET item_status = ? WHERE order_item_id = ?",
+      "UPDATE svit_order_items SET item_status = ? WHERE order_item_id = ?",
       [status, itemId]
     );
 

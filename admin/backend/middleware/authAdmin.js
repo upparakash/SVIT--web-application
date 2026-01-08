@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
-const  pool  = require("../config/db"); // ✅ import your MySQL pool connection
+const  pool  = require("../config/db"); 
 
 exports.authAdmin = async (req, res, next) => {
   try {
-    // 1️⃣ Check for the token
+    //  Check for the token
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ message: "Not authorized, token missing" });
@@ -11,13 +11,13 @@ exports.authAdmin = async (req, res, next) => {
 
     const token = authHeader.split(" ")[1];
 
-    // 2️⃣ Verify JWT token
+    //  Verify JWT token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Decoded token:", decoded);
 
-    // 3️⃣ Fetch admin from MySQL
+    // Fetch admin from MySQL
     const [rows] = await pool.query(
-      "SELECT id, email FROM admins WHERE id = ?",
+      "SELECT id, email FROM svit_admins WHERE id = ?",
       [decoded.id]
     );
 
@@ -28,7 +28,7 @@ exports.authAdmin = async (req, res, next) => {
     const admin = rows[0];
     console.log("Fetched admin:", admin);
 
-    // 4️⃣ Attach admin to request
+    //  Attach admin to request
     req.admin = admin;
     next();
 

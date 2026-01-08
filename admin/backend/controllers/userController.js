@@ -21,17 +21,17 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: "Passwords do not match." });
     }
 
-    const [emailCheck] = await pool.query("SELECT id FROM users WHERE email = ?", [email]);
+    const [emailCheck] = await pool.query("SELECT id FROM svit_users WHERE email = ?", [email]);
     if (emailCheck.length > 0) return res.status(409).json({ message: "Email already exists." });
 
-    const [mobileCheck] = await pool.query("SELECT id FROM users WHERE mobile = ?", [mobile]);
+    const [mobileCheck] = await pool.query("SELECT id FROM svit_users WHERE mobile = ?", [mobile]);
     if (mobileCheck.length > 0) return res.status(409).json({ message: "Mobile number already exists." });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const profilePath = req.file ? `${BASE_URL}${req.file.filename}` : null;
 
     const [result] = await pool.query(
-      `INSERT INTO users (fullname, email, mobile, password, profile) VALUES (?, ?, ?, ?, ?)`,
+      `INSERT INTO svit_users (fullname, email, mobile, password, profile) VALUES (?, ?, ?, ?, ?)`,
       [fullname, email, mobile, hashedPassword, profilePath]
     );
 
@@ -55,7 +55,7 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ message: "Email and password are required." });
 
-    const [existing] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
+    const [existing] = await pool.query("SELECT * FROM svit_users WHERE email = ?", [email]);
     if (existing.length === 0) return res.status(404).json({ message: "User not found." });
 
     const user = existing[0];
@@ -82,13 +82,13 @@ exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: "Email is required." });
 
-    const [user] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
+    const [user] = await pool.query("SELECT * FROM svit_users WHERE email = ?", [email]);
     if (user.length === 0) return res.status(404).json({ message: "Email not registered." });
 
     const resetToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "10m" });
     const expiry = new Date(Date.now() + 10 * 60 * 1000);
 
-    await pool.query("UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?", [resetToken, expiry, email]);
+    await pool.query("UPDATE svit_users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?", [resetToken, expiry, email]);
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
 
@@ -98,9 +98,9 @@ exports.forgotPassword = async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: `"Aspire Beauty" <${process.env.EMAIL_USER}>`,
+      from: `"SVIT" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "Reset your Aspire Beauty password",
+      subject: "Reset your SVIT password",
       text: `Click this link to reset your password: ${resetUrl} (expires in 10 mins)`
     });
 
@@ -120,11 +120,11 @@ exports.resetPassword = async (req, res) => {
     if (password !== confirmPassword) return res.status(400).json({ message: "Passwords do not match." });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const [user] = await pool.query("SELECT * FROM users WHERE email = ?", [decoded.email]);
+    const [user] = await pool.query("SELECT * FROM svit_users WHERE email = ?", [decoded.email]);
     if (user.length === 0) return res.status(404).json({ message: "User not found." });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await pool.query("UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE email = ?", [hashedPassword, decoded.email]);
+    await pool.query("UPDATE svit_users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE email = ?", [hashedPassword, decoded.email]);
 
     res.json({ message: "Password reset successfully!", success: true });
 
@@ -142,13 +142,13 @@ exports.updateProfile = async (req, res) => {
     const userId = req.user.id;
     const { fullname, mobile } = req.body;
 
-    const [userRows] = await pool.query("SELECT * FROM users WHERE id = ?", [userId]);
+    const [userRows] = await pool.query("SELECT * FROM svit_users WHERE id = ?", [userId]);
     if (userRows.length === 0) return res.status(404).json({ message: "User not found" });
 
     let newProfilePath = userRows[0].profile;
     if (req.file) newProfilePath = `${BASE_URL}${req.file.filename}`;
 
-    await pool.query("UPDATE users SET fullname = ?, mobile = ?, profile = ? WHERE id = ?", [fullname, mobile, newProfilePath, userId]);
+    await pool.query("UPDATE svit_users SET fullname = ?, mobile = ?, profile = ? WHERE id = ?", [fullname, mobile, newProfilePath, userId]);
 
     res.json({ message: "Profile updated successfully!", user: { id: userId, fullname, email: userRows[0].email, mobile, profile: newProfilePath } });
 
@@ -161,7 +161,7 @@ exports.updateProfile = async (req, res) => {
 // ================= GET ALL USERS (ADMIN) =================
 exports.getAllUsers = async (req, res) => {
   try {
-    const [users] = await pool.query("SELECT id, fullname, email, mobile, profile, notify, created_at FROM users ORDER BY id DESC");
+    const [users] = await pool.query("SELECT id, fullname, email, mobile, profile, notify, created_at FROM svit_users ORDER BY id DESC");
     res.status(200).json({ message: "Users fetched successfully!", users });
   } catch (error) {
     console.error("Get All Users Error:", error);

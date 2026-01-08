@@ -31,7 +31,7 @@ exports.addProduct = async (req, res) => {
 
     // Avoid duplicate SKU
     const [existingSKU] = await pool.query(
-      "SELECT id FROM product_details WHERE sku = ? LIMIT 1",
+      "SELECT id FROM svit_product_details WHERE sku = ? LIMIT 1",
       [sku]
     );
 
@@ -41,7 +41,7 @@ exports.addProduct = async (req, res) => {
 
     // Insert Product
     const [result] = await pool.query(
-      `INSERT INTO product_details 
+      `INSERT INTO svit_product_details 
       (brand, product_name, price, category_id, image1, image2, product_information, warranty, sku)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
@@ -108,9 +108,9 @@ exports.getProductbyId = async (req, res) => {
         pi.key_feature_3,
         pi.key_feature_4
 
-      FROM product_details p
-      LEFT JOIN categories c ON p.category_id = c.id
-      LEFT JOIN product_info pi ON pi.product_id = p.id
+      FROM svit_product_details p
+      LEFT JOIN svit_categories c ON p.category_id = c.id
+      LEFT JOIN svit_product_info pi ON pi.product_id = p.id
       WHERE p.id = ?
       `,
       [id]
@@ -207,9 +207,9 @@ exports.getAllProducts = async (req, res) => {
         pi.key_feature_3,
         pi.key_feature_4
 
-      FROM product_details p
-      LEFT JOIN categories c ON p.category_id = c.id
-      LEFT JOIN product_info pi ON pi.product_id = p.id
+      FROM svit_product_details p
+      LEFT JOIN svit_categories c ON p.category_id = c.id
+      LEFT JOIN svit_product_info pi ON pi.product_id = p.id
       ORDER BY p.id DESC
       `
     );
@@ -266,7 +266,7 @@ exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [existing] = await pool.query("SELECT * FROM product_details WHERE id = ?", [id]);
+    const [existing] = await pool.query("SELECT * FROM svit_product_details WHERE id = ?", [id]);
     if (existing.length === 0) {
       return res.status(404).json({ message: "Product not found" });
     }
@@ -282,7 +282,7 @@ exports.updateProduct = async (req, res) => {
     // Duplicate SKU check (if SKU is changed)
     if (sku && sku !== old.sku) {
       const [existingSKU] = await pool.query(
-        "SELECT id FROM product_details WHERE sku = ? LIMIT 1",
+        "SELECT id FROM svit_product_details WHERE sku = ? LIMIT 1",
         [sku]
       );
 
@@ -297,7 +297,7 @@ exports.updateProduct = async (req, res) => {
     const image2 = files.image2 ? `${req.protocol}://${req.get("host")}/uploads/${req.files.image1[2].filename}` : old.image2;
 
     await pool.query(
-      `UPDATE product_details SET
+      `UPDATE svit_product_details SET
         brand = ?,
         product_name = ?,
         price = ?,
@@ -338,7 +338,7 @@ exports.deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [result] = await pool.query("DELETE FROM product_details WHERE id = ?", [id]);
+    const [result] = await pool.query("DELETE FROM svit_product_details WHERE id = ?", [id]);
 
     if (result.affectedRows === 0)
       return res.status(404).json({ message: "Product not found" });

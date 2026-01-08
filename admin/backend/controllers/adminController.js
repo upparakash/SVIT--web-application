@@ -14,7 +14,7 @@ exports.register = async (req, res) => {
     }
 
     // Check if email already exists
-    const [existing] = await pool.query("SELECT * FROM admins WHERE email = ?", [email]);
+    const [existing] = await pool.query("SELECT * FROM svit_admins WHERE email = ?", [email]);
     if (existing.length > 0) {
       return res.status(409).json({ message: "Email already exists." });
     }
@@ -23,7 +23,7 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Insert into DB
-    await pool.query("INSERT INTO admins (email, password) VALUES (?, ?)", [
+    await pool.query("INSERT INTO svit_admins (email, password) VALUES (?, ?)", [
       email,
       hashedPassword,
     ]);
@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
     }
 
     // Find the admin
-    const [existing] = await pool.query("SELECT * FROM admins WHERE email = ?", [email]);
+    const [existing] = await pool.query("SELECT * FROM svit_admins WHERE email = ?", [email]);
     if (existing.length === 0) {
       return res.status(404).json({ message: "Email does not exist." });
     }

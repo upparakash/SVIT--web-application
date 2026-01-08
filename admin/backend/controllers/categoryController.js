@@ -1,6 +1,6 @@
 const pool = require("../config/db");
 
-// ✅ Add Category
+// Add Category
 exports.addCategory = async (req, res) => {
   try {
     console.log("Request body:", req.body);
@@ -17,7 +17,7 @@ exports.addCategory = async (req, res) => {
 
     // Check for duplicates
     const [existing] = await pool.query(
-      "SELECT id FROM categories WHERE categoryname = ?",
+      "SELECT id FROM svit_categories WHERE categoryname = ?",
       [categoryname]
     );
     if (existing.length > 0) {
@@ -25,7 +25,7 @@ exports.addCategory = async (req, res) => {
     }
 
     const [result] = await pool.query(
-      `INSERT INTO categories (categoryname, image, description) VALUES (?, ?, ?)`,
+      `INSERT INTO svit_categories (categoryname, image, description) VALUES (?, ?, ?)`,
       [categoryname, category_logo, description]
     );
 
@@ -41,10 +41,10 @@ exports.addCategory = async (req, res) => {
   }
 };
 
-// ✅ Get All Categories
+// Get All Categories
 exports.getAllCategories = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM categories ORDER BY id DESC");
+    const [rows] = await pool.query("SELECT * FROM svit_categories ORDER BY id DESC");
     res.json(rows);
   } catch (error) {
     console.error("Error in getAllCategories:", error);
@@ -52,23 +52,23 @@ exports.getAllCategories = async (req, res) => {
   }
 };
 
-// ✅ Get Single Category by ID
+//  Get Single Category by ID
 exports.getCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const [rows] = await pool.query("SELECT * FROM categories WHERE id = ?", [id]);
+    const [rows] = await pool.query("SELECT * FROM svit_categories WHERE id = ?", [id]);
 
     if (rows.length === 0)
       return res.status(404).json({ message: "Category not found" });
 
-    res.status(200).json(rows[0]); // ✅ Correct success status
+    res.status(200).json(rows[0]); 
   } catch (error) {
     console.error("Error in getCategory:", error);
     res.status(500).json({ error: error.message });
   }
 };
 
-// ✅ Update Category
+//  Update Category
 exports.updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
@@ -79,13 +79,13 @@ exports.updateCategory = async (req, res) => {
       : null;
 
     // Check if category exists
-    const [existing] = await pool.query("SELECT * FROM categories WHERE id = ?", [id]);
+    const [existing] = await pool.query("SELECT * FROM svit_categories WHERE id = ?", [id]);
     if (existing.length === 0)
       return res.status(404).json({ message: "Category not found" });
 
     // Update with or without new image
     const [result] = await pool.query(
-      `UPDATE categories 
+      `UPDATE svit_categories 
        SET categoryname = ?, 
            description = ?, 
            image = IFNULL(?, image) 
@@ -96,22 +96,22 @@ exports.updateCategory = async (req, res) => {
     if (result.affectedRows === 0)
       return res.status(404).json({ message: "Category not updated" });
 
-    res.json({ message: "✅ Category updated successfully" });
+    res.json({ message: "Category updated successfully" });
   } catch (error) {
     console.error("Error in updateCategory:", error);
     res.status(500).json({ error: error.message });
   }
 };
 
-// ✅ Delete Category
+//  Delete Category
 exports.deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const [result] = await pool.query("DELETE FROM categories WHERE id = ?", [id]);
+    const [result] = await pool.query("DELETE FROM svit_categories WHERE id = ?", [id]);
     if (result.affectedRows === 0)
       return res.status(404).json({ message: "Category not found" });
 
-    res.json({ message: "🗑️ Category deleted successfully!" });
+    res.json({ message: " Category deleted successfully!" });
   } catch (error) {
     console.error("Error in deleteCategory:", error);
     res.status(500).json({ error: error.message });

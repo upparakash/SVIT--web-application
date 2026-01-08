@@ -34,7 +34,7 @@ exports.addProductInfo = async (req, res) => {
 
     // Prevent duplicate entry
     const [exists] = await db.execute(
-      "SELECT id FROM product_info WHERE product_id = ?",
+      "SELECT id FROM svit_product_info WHERE product_id = ?",
       [product_id]
     );
 
@@ -46,7 +46,7 @@ exports.addProductInfo = async (req, res) => {
     }
 
     const [result] = await db.execute(
-      `INSERT INTO product_info (
+      `INSERT INTO svit_product_info (
         product_id, product_name, category_id, category_name,
         power, users, resolution, connectivity, storage,
         view_angle, records, display, communication,
@@ -97,8 +97,8 @@ exports.getAllProductInfo = async (req, res) => {
   try {
     const [rows] = await db.execute(
       `SELECT pi.*, pd.product_name
-       FROM product_info pi
-       JOIN product_details pd ON pd.id = pi.product_id
+       FROM svit_product_info pi
+       JOIN svit_product_details pd ON pd.id = pi.product_id
        ORDER BY pi.created_at DESC`
     );
 
@@ -120,8 +120,8 @@ exports.getSingleProductInfo = async (req, res) => {
 
     const [rows] = await db.execute(
       `SELECT pi.*, pd.product_name
-       FROM product_info pi
-       JOIN product_details pd ON pd.id = pi.product_id
+       FROM svit_product_info pi
+       JOIN svit_product_details pd ON pd.id = pi.product_id
        WHERE pi.product_id = ?`,
       [product_id]
     );
@@ -169,7 +169,7 @@ exports.updateProductInfo = async (req, res) => {
     } = req.body;
 
     const [result] = await db.execute(
-      `UPDATE product_info SET
+      `UPDATE svit_product_info SET
         category_id = ?,
         category_name = ?,
         power = ?,
@@ -235,7 +235,7 @@ exports.deleteProductInfo = async (req, res) => {
     const { product_id } = req.params;
 
     const [result] = await db.execute(
-      "DELETE FROM product_info WHERE product_id = ?",
+      "DELETE FROM svit_product_info WHERE product_id = ?",
       [product_id]
     );
 
