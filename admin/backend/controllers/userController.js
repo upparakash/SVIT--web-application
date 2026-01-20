@@ -161,7 +161,8 @@ exports.updateProfile = async (req, res) => {
 // ================= GET ALL USERS (ADMIN) =================
 exports.getAllUsers = async (req, res) => {
   try {
-    const [users] = await pool.query("SELECT id, fullname, email, mobile, profile, notify, created_at FROM svit_users ORDER BY id DESC");
+    const [users] = await pool.query("SELECT id, fullname, email, mobile, profile,  created_at FROM svit_users ORDER BY id DESC");
+    console.log('users from controller',users)
     res.status(200).json({ message: "Users fetched successfully!", users });
   } catch (error) {
     console.error("Get All Users Error:", error);

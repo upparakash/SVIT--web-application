@@ -102,7 +102,18 @@ exports.getAllOrders = async (req, res) => {
       "SELECT * FROM svit_orders ORDER BY created_at DESC"
     );
 
-    res.json({ success: true, orders });
+    for (let order of orders) {
+      const [items] = await db.query(
+        "SELECT * FROM svit_order_items WHERE order_id = ?",
+        [order.order_id]
+      );
+      order.items = items;
+    }
+
+    res.json({
+      success: true,
+      orders
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -110,6 +121,7 @@ exports.getAllOrders = async (req, res) => {
     });
   }
 };
+
 
 /* ==================================================
    GET ORDER BY ID
@@ -137,8 +149,10 @@ exports.getOrderById = async (req, res) => {
 
     res.json({
       success: true,
-      order,
-      items
+      order: {
+        ...order,
+        items
+      }
     });
   } catch (error) {
     res.status(500).json({
@@ -148,31 +162,39 @@ exports.getOrderById = async (req, res) => {
   }
 };
 
+
 /* ==================================================
    GET ORDERS BY USER ID
 ================================================== */
 exports.getOrdersByUserId = async (req, res) => {
   try {
-    // user id comes from JWT via authUser middleware
     const userId = req.user.id;
-
-    console.log("Authenticated user:", req.user);
-    console.log("User ID:", userId);
 
     const [orders] = await db.query(
       "SELECT * FROM svit_orders WHERE user_id = ? ORDER BY created_at DESC",
       [userId]
     );
 
-    res.json({ success: true, orders });
+    for (let order of orders) {
+      const [items] = await db.query(
+        "SELECT * FROM svit_order_items WHERE order_id = ?",
+        [order.order_id]
+      );
+      order.items = items;
+    }
+
+    res.json({
+      success: true,
+      orders
+    });
   } catch (error) {
-    console.error("Get orders error:", error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      error: error.message
     });
   }
 };
+
 
 
 /* ==================================================

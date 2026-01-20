@@ -26,8 +26,8 @@ exports.addProduct = async (req, res) => {
     }
 
 
-      const image1 = files.image1 ? `${req.protocol}://${req.get("host")}/uploads/${req.files.image1[0].filename}` : null;
-      const image2 = files.image2 ? `${req.protocol}://${req.get("host")}/uploads/${req.files.image2[0].filename}`: null;
+    const image1 = files.image1 ? `${req.protocol}://${req.get("host")}/uploads/${req.files.image1[0].filename}` : null;
+    const image2 = files.image2 ? `${req.protocol}://${req.get("host")}/uploads/${req.files.image2[0].filename}` : null;
 
     // Avoid duplicate SKU
     const [existingSKU] = await pool.query(
@@ -139,25 +139,25 @@ exports.getProductbyId = async (req, res) => {
 
       productInfo: row.product_info_id
         ? {
-            power: row.power,
-            users: row.users,
-            resolution: row.resolution,
-            connectivity: row.connectivity,
-            storage: row.storage,
-            view_angle: row.view_angle,
-            records: row.records,
-            display: row.display,
-            communication: row.communication,
-            cards: row.cards,
-            installation: row.installation,
-            material: row.material,
-            key_features: [
-              row.key_feature_1,
-              row.key_feature_2,
-              row.key_feature_3,
-              row.key_feature_4
-            ].filter(Boolean)
-          }
+          power: row.power,
+          users: row.users,
+          resolution: row.resolution,
+          connectivity: row.connectivity,
+          storage: row.storage,
+          view_angle: row.view_angle,
+          records: row.records,
+          display: row.display,
+          communication: row.communication,
+          cards: row.cards,
+          installation: row.installation,
+          material: row.material,
+          key_features: [
+            row.key_feature_1,
+            row.key_feature_2,
+            row.key_feature_3,
+            row.key_feature_4
+          ].filter(Boolean)
+        }
         : null
     };
 
@@ -227,25 +227,25 @@ exports.getAllProducts = async (req, res) => {
 
       productInfo: row.product_info_id
         ? {
-            power: row.power,
-            users: row.users,
-            resolution: row.resolution,
-            connectivity: row.connectivity,
-            storage: row.storage,
-            view_angle: row.view_angle,
-            records: row.records,
-            display: row.display,
-            communication: row.communication,
-            cards: row.cards,
-            installation: row.installation,
-            material: row.material,
-            key_features: [
-              row.key_feature_1,
-              row.key_feature_2,
-              row.key_feature_3,
-              row.key_feature_4
-            ].filter(Boolean)
-          }
+          power: row.power,
+          users: row.users,
+          resolution: row.resolution,
+          connectivity: row.connectivity,
+          storage: row.storage,
+          view_angle: row.view_angle,
+          records: row.records,
+          display: row.display,
+          communication: row.communication,
+          cards: row.cards,
+          installation: row.installation,
+          material: row.material,
+          key_features: [
+            row.key_feature_1,
+            row.key_feature_2,
+            row.key_feature_3,
+            row.key_feature_4
+          ].filter(Boolean)
+        }
         : null
     }));
 
@@ -293,8 +293,9 @@ exports.updateProduct = async (req, res) => {
 
     // Handle images
     const files = req.files || {};
-    const image1 = files.image1 ? `${req.protocol}://${req.get("host")}/uploads/${req.files.image1[0].filename}` : old.image1;
-    const image2 = files.image2 ? `${req.protocol}://${req.get("host")}/uploads/${req.files.image1[2].filename}` : old.image2;
+
+    const image1 = files?.image1?.[0] ? `${req.protocol}://${req.get("host")}/uploads/${files.image1[0].filename}` : old.image1;
+    const image2 = files?.image2?.[0] ? `${req.protocol}://${req.get("host")}/uploads/${files.image2[0].filename}` : old.image2;
 
     await pool.query(
       `UPDATE svit_product_details SET

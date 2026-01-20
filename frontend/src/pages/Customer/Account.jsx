@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile, logout, clearStatus } from "../../features/user/userSlice";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getUserOrders } from "../../features/order/orderSlice";
-
 
 const Account = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, loading, success, error } = useSelector((state) => state.auth);
-
-
   const location = useLocation();
 
-const [activeTab, setActiveTab] = useState(
-  location.state?.tab || "profile"
-);
+  const { user, loading, success, error } = useSelector((state) => state.auth);
+  const { orders } = useSelector((state) => state.orders);
 
+  const [activeTab, setActiveTab] = useState(
+    location.state?.tab || "profile"
+  );
 
+  // 🔹 NEW STATE (only addition)
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
 
 
   const [formData, setFormData] = useState({
@@ -49,6 +48,13 @@ const [activeTab, setActiveTab] = useState(
     }
   }, [success, error, dispatch]);
 
+  /* ================= Fetch Orders ================= */
+  useEffect(() => {
+    if (activeTab === "orders" && user?.id) {
+      dispatch(getUserOrders(user.id));
+    }
+  }, [activeTab, dispatch, user?.id]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -56,19 +62,16 @@ const [activeTab, setActiveTab] = useState(
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     setFormData({ ...formData, profile: file });
     setPreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const data = new FormData();
     data.append("fullname", formData.fullname);
     data.append("mobile", formData.mobile);
     if (formData.profile) data.append("profile", formData.profile);
-
     dispatch(updateProfile(data));
   };
 
@@ -76,28 +79,6 @@ const [activeTab, setActiveTab] = useState(
     dispatch(logout());
     navigate("/login");
   };
-
-
- 
-
-
-
-
-const { orders } = useSelector((state) => state.orders);
-
-
-useEffect(() => {
-  if (activeTab === "orders" && user?.id) {
-    dispatch(getUserOrders(user.id));
-  }
-}, [activeTab, dispatch, user?.id]);
-
-
-useEffect(() => {
-  console.log("ORDERS DATA:", orders);
-}, [orders]);
-
-
 
   return (
     <div className="max-w-7xl mx-auto px-5 md:px-12 py-12">
@@ -111,11 +92,10 @@ useEffect(() => {
             {["profile", "orders", "wishlist", "addresses"].map((tab) => (
               <li key={tab}>
                 <button
-                  className={`block w-full text-left px-3 py-2 rounded-md transition ${
-                    activeTab === tab
+                  className={`block w-full text-left px-3 py-2 rounded-md transition ${activeTab === tab
                       ? "bg-[#21808D] text-white"
                       : "hover:bg-gray-100"
-                  }`}
+                    }`}
                   onClick={() => setActiveTab(tab)}
                 >
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -136,13 +116,13 @@ useEffect(() => {
 
         {/* ================= MAIN CONTENT ================= */}
         <div className="w-full lg:w-3/4 bg-white shadow-md border border-gray-200 rounded-xl p-8">
+          {/* ================= PROFILE ================= */}
           {activeTab === "profile" && (
             <div>
               <h3 className="text-2xl font-semibold mb-6">
                 Profile Information
               </h3>
 
-              {/* Alerts */}
               {success && (
                 <p className="mb-4 text-green-600 font-medium">{success}</p>
               )}
@@ -151,7 +131,6 @@ useEffect(() => {
               )}
 
               <form className="space-y-6" onSubmit={handleSubmit}>
-                {/* Profile Image */}
                 <div className="flex items-center gap-4">
                   <img
                     src={
@@ -181,8 +160,7 @@ useEffect(() => {
                     name="fullname"
                     value={formData.fullname}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-1 focus:ring-[#21808D]"
-                    required
+                    className="w-full px-4 py-2 mt-1 border rounded-md"
                   />
                 </div>
 
@@ -203,14 +181,14 @@ useEffect(() => {
                     name="mobile"
                     value={formData.mobile}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-1 focus:ring-[#21808D]"
+                    className="w-full px-4 py-2 mt-1 border rounded-md"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-[#21808D] text-white px-6 py-3 rounded-md hover:bg-[#1a676f] transition disabled:opacity-60"
+                  className="bg-[#21808D] text-white px-6 py-3 rounded-md hover:bg-[#1a676f]"
                 >
                   {loading ? "Updating..." : "Update Profile"}
                 </button>
@@ -218,45 +196,85 @@ useEffect(() => {
             </div>
           )}
 
+          {/* ================= ORDERS ================= */}
           {activeTab === "orders" && (
-  <div>
-    <h3 className="text-2xl font-semibold mb-6">My Orders</h3>
+            <div>
+              <h3 className="text-2xl font-semibold mb-6">My Orders</h3>
 
-    {Array.isArray(orders) && orders.length > 0 ? (
-      <ul className="space-y-4">
-        {orders.map((order) => (
-          <li
-            key={order.order_id}
-            className="border rounded-lg p-4 shadow-sm"
+              {Array.isArray(orders) && orders.length > 0 ? (
+                <ul className="space-y-4">
+                  {orders.map((order) => (
+  <li
+    key={order.order_id}
+    className="border rounded-lg p-4 shadow-sm"
+  >
+    <p className="font-medium">
+      Order ID: <span className="text-gray-700">{order.order_id}</span>
+    </p>
+
+    <p className="text-sm text-gray-600">
+      Payment Status:{" "}
+      <span className="font-medium">{order.payment_status}</span>
+    </p>
+
+    <p className="text-sm text-gray-600">
+      Total Amount: ₹{order.total_amount}
+    </p>
+
+    <p className="text-xs text-gray-400 mt-1">
+      Ordered on: {new Date(order.created_at).toLocaleDateString()}
+    </p>
+
+    {/* VIEW BUTTON */}
+    <button
+      className="mt-3 text-sm text-[#21808D] font-medium"
+      onClick={() =>
+        setExpandedOrderId(
+          expandedOrderId === order.order_id ? null : order.order_id
+        )
+      }
+    >
+      {expandedOrderId === order.order_id ? "Hide" : "View"}
+    </button>
+
+    {/*  ORDER DETAILS (shows directly below THIS order) */}
+    {expandedOrderId === order.order_id && (
+      <div className="mt-4 border rounded-lg p-4">
+        <h4 className="font-semibold mb-3">
+          Order Items
+        </h4>
+
+        {order.items?.map((item) => (
+          <div
+            key={item.order_item_id}
+            className="flex gap-4 mb-3"
           >
-            <p className="font-medium">
-              Order ID: <span className="text-gray-700">{order.order_id}</span>
-            </p>
+            <img
+              src={item.product_image}
+              alt={item.product_name}
+              className="w-20 h-20 object-cover rounded"
+            />
 
-            <p className="text-sm text-gray-600">
-              Payment Status:{" "}
-              <span className="font-medium">{order.payment_status}</span>
-            </p>
-
-            <p className="text-sm text-gray-600">
-              Total Amount: ₹{order.total_amount}
-            </p>
-
-            <p className="text-xs text-gray-400 mt-1">
-              Ordered on: {new Date(order.created_at).toLocaleDateString()}
-            </p>
-          </li>
+            <div>
+              <p className="font-medium">{item.product_name}</p>
+              <p className="text-sm">Qty: {item.quantity}</p>
+              <p className="text-sm">₹{item.total_price}</p>
+            </div>
+          </div>
         ))}
-      </ul>
-    ) : (
-      <p className="text-gray-600">No orders found.</p>
+      </div>
     )}
-  </div>
-)}
+  </li>
+))}
 
+                </ul>
+              ) : (
+                <p className="text-gray-600">No orders found.</p>
+              )}
 
-
-
+              
+            </div>
+          )}
 
           {activeTab === "wishlist" && (
             <p className="text-gray-600">Your wishlist is empty.</p>
