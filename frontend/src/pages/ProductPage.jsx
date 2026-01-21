@@ -120,15 +120,43 @@ const ProductPage = () => {
 
           {/* ACTION BUTTONS */}
           <div className="flex gap-4 mt-6">
-            <button
-              onClick={() =>
-                dispatch(addToCart({ product, quantity }))
-              }
-              className="bg-teal-600 text-white px-6 py-3 rounded-md 
-               hover:bg-teal-700 transition"
-            >
-              Add to Cart
-            </button>
+           {!cartItem ? (
+                       <button
+                         onClick={() =>
+                           dispatch(
+                             addToCart({
+                               id: product.id,
+                               name: product.product_name,
+                               image: product.image1,
+                               price: Number(product.price),
+                               brand: product.brand,
+                               sku: product.sku
+                             })
+                           )
+                         }
+                         className="flex-1 bg-[#21808D] text-white py-2 rounded-lg hover:bg-[#1a6a75] transition"
+                       >
+                         Add To Cart
+                       </button>
+                     ) : (
+                       <div className="flex items-center justify-between flex-1 border border-gray-300 rounded-lg px-3 py-2">
+                         <button
+                           onClick={() => dispatch(decrementQuantity(product.id))}
+                           className="text-lg font-bold"
+                         >
+                           −
+                         </button>
+           
+                         <span className="font-semibold">{cartItem.quantity}</span>
+           
+                         <button
+                           onClick={() => dispatch(incrementQuantity(product.id))}
+                           className="text-lg font-bold"
+                         >
+                           +
+                         </button>
+                       </div>
+                     )}
 
             <button className="bg-gray-200 px-6 py-3 rounded-md hover:bg-gray-300">
               Add to Wishlist

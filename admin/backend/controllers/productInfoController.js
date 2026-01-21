@@ -5,8 +5,6 @@ exports.addProductInfo = async (req, res) => {
     const {
       product_id,
       product_name,
-      category_id,
-      category_name,
       power,
       users,
       resolution,
@@ -25,14 +23,35 @@ exports.addProductInfo = async (req, res) => {
       key_feature_4
     } = req.body;
 
-    if (!product_id || !product_name  || !category_id || !category_name) {
+
+    const [dbName] = await db.execute("SELECT DATABASE() AS db");
+console.log(" Connected DB:", dbName[0].db);
+
+const [cols] = await db.execute("SHOW COLUMNS FROM svit_product_info");
+console.log(" Columns:", cols.map(c => c.Field));
+
+
+    // 1️⃣ Get category_id from product table
+const [productRows] = await db.execute(
+  `SELECT p.category_id, c.categoryname AS category_name
+   FROM svit_product_details p
+   JOIN svit_categories c ON p.category_id = c.id
+   WHERE p.id = ?`,
+  [product_id]
+);
+
+
+
+    if (!productRows.length) {
       return res.status(400).json({
         success: false,
-        message: "product_id, product_name, category_id, category_name are required"
+        message: "Invalid product_id"
       });
     }
 
-    // Prevent duplicate entry
+    const { category_id, category_name } = productRows[0];
+
+    // 2️⃣ Prevent duplicates
     const [exists] = await db.execute(
       "SELECT id FROM svit_product_info WHERE product_id = ?",
       [product_id]
@@ -45,6 +64,9 @@ exports.addProductInfo = async (req, res) => {
       });
     }
 
+
+    
+    // 3️⃣ INSERT WITH category_id ✅
     const [result] = await db.execute(
       `INSERT INTO svit_product_info (
         product_id, product_name, category_id, category_name,
@@ -55,7 +77,7 @@ exports.addProductInfo = async (req, res) => {
       ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         product_id,
-         product_name,
+        product_name,
         category_id,
         category_name,
         power,
